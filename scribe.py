@@ -36,7 +36,6 @@ except Exception as e:
 try:
     while True:
         msg = consumer.poll(1.0)
-        print("⏳ Polling...", flush=True)
 
         if msg is None:
             continue
