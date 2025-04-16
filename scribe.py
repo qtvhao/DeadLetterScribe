@@ -1,5 +1,6 @@
 import os
 from confluent_kafka import Consumer, KafkaError
+from confluent_kafka.admin import AdminClient, NewTopic
 
 print("🚀 Script started", flush=True)
 
@@ -16,6 +17,25 @@ DLQ_TOPIC = os.getenv('DLQ_TOPIC', 'dlq')
 print("🔧 Kafka Config:", conf, flush=True)
 print("📦 DLQ_TOPIC:", DLQ_TOPIC, flush=True)
 
+# Check and create topic if it doesn't exist
+admin_conf = {'bootstrap.servers': conf['bootstrap.servers']}
+admin_client = AdminClient(admin_conf)
+
+topic_metadata = admin_client.list_topics(timeout=5)
+if DLQ_TOPIC not in topic_metadata.topics:
+    print(f"⚠️ Topic '{DLQ_TOPIC}' does not exist. Creating...", flush=True)
+    new_topic = NewTopic(DLQ_TOPIC, num_partitions=1, replication_factor=1)
+    fs = admin_client.create_topics([new_topic])
+
+    try:
+        fs[DLQ_TOPIC].result()
+        print(f"✅ Topic '{DLQ_TOPIC}' created successfully.", flush=True)
+    except Exception as e:
+        print(f"❌ Failed to create topic '{DLQ_TOPIC}': {e}", flush=True)
+        exit(1)
+else:
+    print(f"🔍 Topic '{DLQ_TOPIC}' already exists.", flush=True)
+
 # Try creating the Kafka consumer
 try:
     consumer = Consumer(conf)
@@ -26,7 +46,7 @@ except Exception as e:
 # Subscribe to topic
 try:
     consumer.subscribe([DLQ_TOPIC])
-    print(f"📡 Listening to DLQ topic: {DLQ_TOPIC}", flush=True)
+    print(f"📱 Listening to DLQ topic: {DLQ_TOPIC}", flush=True)
     print("✅ Subscribed. Waiting for messages...", flush=True)
 except Exception as e:
     print(f"❌ Failed to subscribe to topic: {e}", flush=True)
