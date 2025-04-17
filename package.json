@@ -4,7 +4,7 @@
   "description": "Kafka Dead Letter Queue (DLQ) consumer using KafkaJS.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node scribe.js"
   },
   "author": "Your Name",
   "license": "MIT",
