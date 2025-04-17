@@ -1,0 +1,29 @@
+{
+  "name": "dead-letter-scribe",
+  "version": "1.0.0",
+  "description": "Kafka Dead Letter Queue (DLQ) consumer using KafkaJS.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "kafkajs": "^2.2.4"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "kafka",
+    "kafkajs",
+    "dlq",
+    "consumer",
+    "dead-letter-queue"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qtvhao/DeadLetterScribe.git"
+  }
+}
