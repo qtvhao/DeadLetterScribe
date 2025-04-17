@@ -2,7 +2,7 @@ import { Kafka } from 'kafkajs';
 
 const kafka = new Kafka({
   clientId: 'dlq-consumer',
-  brokers: ['localhost:9092'],
+  brokers: (process.env.BOOTSTRAP_SERVERS || 'localhost:9092').split(','),
 });
 
 (async () => {
